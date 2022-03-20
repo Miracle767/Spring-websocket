@@ -17,10 +17,12 @@ public class Login {
 	@RequestMapping("/loginvalidate")
 	public String loginvalidate(@RequestParam("username") String username,@RequestParam("pic") String pic,@RequestParam("password") String pwd,HttpSession httpSession){
 		String picode=(String) httpSession.getAttribute("rand");
-		if(!picode.equalsIgnoreCase(pic))
+		if(!picode.equalsIgnoreCase(pic)) {
 			return "failcode";
-		if(username==null)
+		}
+		if(username==null) {
 			return "login";
+		}
 		String realpwd=loginservice.getpwdbyname(username);
 		if(realpwd!=null&&pwd.equals(realpwd))
 		{
@@ -28,8 +30,9 @@ public class Login {
 			httpSession.setAttribute("username", username);
 			httpSession.setAttribute("uid", uid);
 			return "chatroom";
-		}else
+		}else {
 			return "fail";
+		}
 	}
 	
 	@RequestMapping("/login")

@@ -11,31 +11,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import po.Staff;
 import service.LoginService;
+/**
+ * @author admin
+ */
 @Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.DEFAULT,timeout=5)
 @Service("loginservice")
 public class LoginServiceImpl implements LoginService{
 	@Autowired
 	LoginMapper loginmapper;
+	@Override
 	public String getpwdbyname(String name) {
 		Staff s=loginmapper.getpwdbyname(name);
-		if(s!=null)
-		return s.getPassword();
-		else
-		return null;
+		if(s!=null) {
+			return s.getPassword();
+		} else {
+			return null;
+		}
 	}
+	@Override
 	public Long getUidbyname(String name) {
 		Staff s=loginmapper.getpwdbyname(name);
-		if(s!=null)
+		if(s!=null) {
 			return (long) s.getStaff_id();
-			else
+		} else {
 			return null;
+		}
 	}
+	@Override
 	public String getnamebyid(long id) {
 		Staff s=loginmapper.getnamebyid(id);
-		if(s!=null)
+		if(s!=null) {
 			return s.getUsername();
-			else
+		} else {
 			return null;
+		}
 	}
 	
 	

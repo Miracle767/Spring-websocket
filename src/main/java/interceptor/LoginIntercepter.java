@@ -27,8 +27,9 @@ public class LoginIntercepter extends HandlerInterceptorAdapter{
         if(username == null){  
             request.getRequestDispatcher("/WEB-INF/content/login.jsp").forward(request, response);  
             return false;  
-        }else  
-            return true;     
+        }else {
+            return true;
+        }
     }    
     
     /** 
@@ -38,7 +39,8 @@ public class LoginIntercepter extends HandlerInterceptorAdapter{
     @Override    
     public void postHandle(HttpServletRequest request,    
             HttpServletResponse response, Object handler,    
-            ModelAndView modelAndView) throws Exception {     
+            ModelAndView modelAndView) throws Exception {
+        
     }    
     
     /**  

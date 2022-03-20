@@ -1,9 +1,7 @@
 package websocket;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,6 +39,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	/**
 	 * 建立连接后,把登录用户的id写入WebSocketSession
 	 */
+	@Override
 	public void afterConnectionEstablished(WebSocketSession session)
 			throws Exception {
 		Long uid = (Long) session.getAttributes().get("uid");
@@ -57,9 +56,11 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	/**
 	 * 消息处理，在客户端通过Websocket API发送的消息会经过这里，然后进行相应的处理
 	 */
+	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-			if(message.getPayloadLength()==0)
+			if(message.getPayloadLength()==0) {
 				return;
+			}
 			Message msg=new Gson().fromJson(message.getPayload().toString(),Message.class);
 			msg.setDate(new Date());
 			sendMessageToUser(msg.getTo(), new TextMessage(new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(msg)));
@@ -68,8 +69,9 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	/**
 	 * 消息传输错误处理
 	 */
+	@Override
 	public void handleTransportError(WebSocketSession session,
-			Throwable exception) throws Exception {
+									 Throwable exception) throws Exception {
 		if (session.isOpen()) {
 			session.close();
 		}
@@ -93,7 +95,8 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	/**
 	 * 关闭连接后
 	 */
-	public void afterConnectionClosed(WebSocketSession session,CloseStatus closeStatus) throws Exception {
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		System.out.println("Websocket:" + session.getId() + "已经关闭");
 		Iterator<Entry<Long, WebSocketSession>> it = userSocketSessionMap.entrySet().iterator();
 		// 移除当前用户的Socket会话
@@ -112,6 +115,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 		}
 	}
 
+	@Override
 	public boolean supportsPartialMessages() {
 		return false;
 	}
@@ -133,6 +137,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 				// entry.getValue().sendMessage(message);
 				new Thread(new Runnable() {
 
+					@Override
 					public void run() {
 						try {
 							if (entry.getValue().isOpen()) {
@@ -152,7 +157,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
 	/**
 	 * 给某个用户发送消息
 	 * 
-	 * @param userName
+	 * @param uid
 	 * @param message
 	 * @throws IOException
 	 */

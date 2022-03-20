@@ -44,8 +44,9 @@ class ChatController {
 			Long entry = it.next();
 			String name=loginservice.getnamebyid(entry);
 			String user=(String)session.getAttribute("username");
-			if(!user.equals(name))
+			if(!user.equals(name)) {
 				nameset.add(name);
+			}
 		}
 		return nameset;
 	}
